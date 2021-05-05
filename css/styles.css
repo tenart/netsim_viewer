@@ -1,0 +1,87 @@
+body {
+    height: 100%;
+    width: 100%;
+    font-family: sans-serif;
+    background: url("../assets/grid.png") left top / 50px 50px repeat;
+}
+
+#root {
+
+}
+
+.node {
+    z-index: 9;
+    height: 80px;
+    width: 80px;
+    box-sizing: border-box;
+    position: absolute;
+    margin: -40px 0 0 -40px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    /* border: 2px solid #000; */
+    border-radius: 100%;
+    cursor: pointer;
+    background-color: gray;
+}
+
+.node.source {
+    background-color: #e97c7c;
+}
+
+.node.sink {
+    color: white;
+    background-color: #000000;
+}
+
+.node.peer {
+    background-color: #6fa3e7;
+}
+
+.edge {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    margin: -20px 0 0 -20px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.edgeStretcher {
+    z-index: 0;
+    height: 10px;
+    min-width: 50px;
+    box-sizing: border-box;
+
+    border-top: 2px solid #000;
+    border-bottom: 2px solid #000;
+    /* background: #fff; */
+    position: absolute;
+}
+
+.edgeLabel {
+    z-index: 1;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    border-radius: 100%;
+    border: 2px solid #000;
+    background: #fff;
+}
+
+button {
+    z-index: 999;
+    position: relative;
+}
