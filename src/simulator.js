@@ -36,6 +36,7 @@ export default class Simulator {
     }
 
     schedule(message) {
+        message.id = this.scheduled.length + 1;
         this.scheduled.push(message);
         console.log(`T${this.time}: [${message.from.id}] -> [${message.to.id}] sending ${message.size} bytes, arriving at ${message.time.arrive}.`);
     }
@@ -73,5 +74,5 @@ export default class Simulator {
     onStop(callback) {
         this.callbacks.stop.push(callback);
     }
-    
+
 }

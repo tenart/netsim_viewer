@@ -3,37 +3,52 @@ import Simulator from "./simulator.js"
 import View from "./view.js";
 
 // Reference to simulator engine
-const simulation = new Simulator({
+const simulator = new Simulator({
     timeStart: 0, 
     timeEnd: 1000
 });
 
 // Reference to GUI resources
 const root = document.getElementById("root");
-const view = new View(simulation, root);
+const view = new View(simulator, root);
 
 // Manually adding Node() objects for testing
 const server = new Node();
 const clientA = new Node();
 const clientB = new Node();
-simulation.addNode(server);
-simulation.addNode(clientA);
-simulation.addNode(clientB);
+const clientC = new Node();
+const clientD = new Node();
+server.type = "source";
+clientA.type = "peer";
+clientB.type = "peer";
+clientC.type = "peer";
+clientD.type = "sink";
+simulator.addNode(server);
+simulator.addNode(clientA);
+simulator.addNode(clientB);
+simulator.addNode(clientC);
+simulator.addNode(clientD);
 
 // Initialize GUI
-view.init();
 
 // What should the simulator do when starting?
-simulation.onStart(() => {
+simulator.onStart(() => {
     console.log("HELLO WORLD");
     server.sendMessage(clientA, {size: 30000});
+    clientC.sendMessage(clientB, {size: 100000});
+    view.init();
 })
 
 // What should the simulator do when stepping?
-simulation.onStep(() => {
-
+simulator.onStep(() => {
+    view.update();
 })
 
-// Manually start and step simulation for testing
-simulation.start();
-simulation.step(1);
+// Manually start and step simulator for testing
+simulator.start();
+
+// setInterval(() => {
+//     simulator.step(1);
+// }, 1000)
+
+

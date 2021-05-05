@@ -11,11 +11,11 @@ body {
 
 .node {
     z-index: 9;
-    height: 80px;
-    width: 80px;
+    height: 50px;
+    width: 50px;
     box-sizing: border-box;
     position: absolute;
-    margin: -40px 0 0 -40px;
+    margin: -25px 0 0 -25px;
 
     display: flex;
     justify-content: center;
@@ -25,6 +25,9 @@ body {
     /* border: 2px solid #000; */
     border-radius: 100%;
     cursor: pointer;
+}
+
+.node.undefined {
     background-color: gray;
 }
 
@@ -33,7 +36,7 @@ body {
 }
 
 .node.sink {
-    color: white;
+    color: #fff;
     background-color: #000000;
 }
 
@@ -41,7 +44,62 @@ body {
     background-color: #6fa3e7;
 }
 
-.edge {
+.node > .label {
+    position: absolute;
+    width: 350px;
+    padding: 5px;
+    box-sizing: border-box;
+
+    transform: translateY(-50px);
+    color: #000;
+    opacity: 0;
+}
+
+.node:hover > .label {
+    opacity: 1;
+}
+
+.link {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    margin: -20px 0 0 -20px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.link > .progress {
+    position: absolute;
+
+    z-index: 0;
+    height: 10px;
+    min-width: 50px;
+    box-sizing: border-box;
+
+    border-top: 2px solid #000;
+    border-bottom: 2px solid #000;
+}
+
+.link > .label {
+    z-index: 1;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    border-radius: 100%;
+    border: 2px solid #000;
+    background: #fff;
+}
+
+/* .edge {
     width: 40px;
     height: 40px;
     position: absolute;
@@ -62,9 +120,10 @@ body {
     border-top: 2px solid #000;
     border-bottom: 2px solid #000;
     /* background: #fff; */
-    position: absolute;
-}
+    /* position: absolute;
+} */
 
+/*
 .edgeLabel {
     z-index: 1;
     height: 100%;
@@ -79,7 +138,7 @@ body {
     border-radius: 100%;
     border: 2px solid #000;
     background: #fff;
-}
+} */
 
 button {
     z-index: 999;

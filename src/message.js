@@ -8,6 +8,7 @@ export default class Message {
         // to is required
         // If no options passed in then use default preset
         options = options !== undefined ? options : this.default();
+        this.id = undefined;
         // Node() objects this message originated from / going to
         this.from = from;
         this.to = to;
@@ -41,5 +42,5 @@ export default class Message {
         let delay = utils.calcDelay(this.getLinkSpeed(), this.size);
         return delay;
     }
-    
+
 }
