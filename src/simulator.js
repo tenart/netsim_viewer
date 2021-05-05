@@ -38,7 +38,7 @@ export default class Simulator {
     schedule(message) {
         message.id = this.scheduled.length + 1;
         this.scheduled.push(message);
-        console.log(`T${this.time}: [${message.from.id}] -> [${message.to.id}] sending ${message.size} bytes, arriving at ${message.time.arrive}.`);
+        console.log(`T${this.time}: [${message.from.id}] -- msg_${message.id} -> [${message.to.id}] sending ${message.size} bytes, arriving at ${message.time.arrive}.`);
     }
     
     // Start simulation but not step automatically
@@ -53,9 +53,25 @@ export default class Simulator {
     step(skip) {
         skip = skip !== undefined ? skip : 1;
         this.time += skip !== undefined ? skip : 1;
-        console.log(`T${this.time}: Stepping time += ${skip} ...`);
+        
+        let toRemove = [];
+        this.scheduled.forEach(message => {
+            message.time.progress = this.time/message.time.arrive;
+            // console.log(message.time.arrive);
+            if(this.time >= message.time.arrive) {
+                let shortTime = String(message.time.arrive).slice(0,8)
+                console.log(`T${this.time}: [${message.from.id}] -- msg_${message.id} -> [${message.to.id}] arrived at T${message.time.arrive}`);
+                let msgIndex = this.scheduled.indexOf(message);
+                toRemove.push(msgIndex);
+            }
+        })
+        toRemove.forEach(index => {
+            this.scheduled.splice(index, 1);
+        })
+
         this.nodes.forEach(node => { node.step() });
         this.callbacks.step.forEach(callback => { callback() });
+        console.log(`T${this.time}: Stepped time += ${skip} ...`);
     }
 
     stop() {

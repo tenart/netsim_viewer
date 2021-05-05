@@ -19,6 +19,7 @@ export default class Message {
             sent: timeSent,
             delayT: this._getDelayT(),
             arrive: timeSent + this._getDelayT(),
+            progress: 0
         }
     }
 

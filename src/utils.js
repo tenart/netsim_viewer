@@ -47,7 +47,7 @@ export const utils =  {
     // Returns angle between two coords
     // can be floats/doubles
     getAngle: (a, b) => {
-        var deg = Math.atan2(a.y - b.y, a.x - b.x) * 180 / Math.PI;
+        var deg = Math.atan2(b.y - a.y, b.x - a.x) * 180 / Math.PI;
         return deg;
     }
 } 

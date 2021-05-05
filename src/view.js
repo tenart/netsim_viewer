@@ -29,14 +29,15 @@ export default class View {
     }
 
     update() {
-        // this.simulator.nodes.forEach(node => {
-        //     let html = document.getElementById(node.id);
-        // })
-        $(root).find(".link").remove();
+        let links = document.getElementsByClassName("link");
+        Array.from(links).forEach(link => {
+            link.remove();
+        })
         this.simulator.scheduled.forEach(message => {
             let html = this._messageToHTML(message);
             this.root.appendChild(html);
         })
+        document.getElementById("stepButton").innerHTML = this.simulator.time;
     }
 
     _nodeToHTML(node) {
@@ -65,26 +66,52 @@ export default class View {
         let progressFill = document.createElement("div");
         let label = document.createElement("div");
         label.classList.add("label");
-        label.innerHTML = message.id;
-        progressFill.classList.add("progresFill");
+        label.innerHTML = message.time.progress;
+        progressFill.style.width = `${message.time.progress * 100}%`;
+        progressFill.classList.add("progressFill");
         progressBar.classList.add("progress");
         progressBar.appendChild(progressFill);
         progressBar.style.width = `${dist}px`;
         progressBar.style.transform = `rotate(${angle}deg)`;
         container.appendChild(progressBar);
         container.appendChild(label)
-        container.classList.add("link");
         container.id = `msg_${message.id}`;
-        container.setAttribute("node-from", message.from.id);
-        container.setAttribute("node-to", message.to.id);
+        container.classList.add("link");
+        container.setAttribute("node_from", message.from.id);
+        container.setAttribute("node_to", message.to.id);
         container.style.top = `${mid.y}px`;
         container.style.left = `${mid.x}px`;
         return container;
     }
+
+    _updateLinks() {
+        let links = document.getElementsByClassName("link");
+        Array.from(links).forEach(link => {
+            // console.log(link.getAttribute("node_to"));
+            let fromID = parseInt(link.getAttribute("node_from"));
+            let toID = parseInt(link.getAttribute("node_to"));
+            let fromPos = this.simulator.nodes[fromID-1].position;
+            let toPos = this.simulator.nodes[toID-1].position;
+            let mid = utils.getMidPoint(fromPos, toPos);
+            let dist = utils.getDistance(fromPos, toPos);
+            let angle = utils.getAngle(fromPos, toPos);
+            link.style.top = `${mid.y}px`;
+            link.style.left = `${mid.x}px`;
+            let progress = link.querySelector(".progress");
+            progress.style.width = `${dist}px`;
+            progress.style.transform = `rotate(${angle}deg)`;
+        })
+    }
     
     _updateDrag(id, pos) {
-        this.simulator.nodes[id-1].position.x = pos.x;
-        this.simulator.nodes[id-1].position.y = pos.y;
+        for(let i = 0; i < this.simulator.nodes.length; i++) {
+            if(this.simulator.nodes[i].id === id) {
+                this.simulator.nodes[i].position.x = pos.x;
+                this.simulator.nodes[i].position.y = pos.y;
+                break;
+            }
+        }
+        this._updateLinks();
     }
 
 }

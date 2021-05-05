@@ -33,7 +33,7 @@ simulator.addNode(clientD);
 
 // What should the simulator do when starting?
 simulator.onStart(() => {
-    console.log("HELLO WORLD");
+    // console.log("HELLO WORLD");
     server.sendMessage(clientA, {size: 30000});
     clientC.sendMessage(clientB, {size: 100000});
     view.init();
@@ -46,6 +46,10 @@ simulator.onStep(() => {
 
 // Manually start and step simulator for testing
 simulator.start();
+
+document.getElementById("stepButton").addEventListener("click", event => {
+    simulator.step();
+})
 
 // setInterval(() => {
 //     simulator.step(1);

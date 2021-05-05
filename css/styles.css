@@ -83,6 +83,13 @@ body {
     border-bottom: 2px solid #000;
 }
 
+.link > .progress > .progressFill {
+    position: relative;
+    height: 100%;
+    width: 19%;
+    background-color: red;
+}
+
 .link > .label {
     z-index: 1;
     height: 100%;
