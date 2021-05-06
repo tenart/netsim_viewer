@@ -5,96 +5,129 @@ import View from "./view.js";
 // Reference to simulator engine
 const simulator = new Simulator({
     timeStart: 0, 
-    timeEnd: 1000
+    timeEnd: 2000
 });
 
 // Reference to GUI resources
 const root = document.getElementById("root");
 const view = new View(simulator, root);
 
-// Manually adding Node() objects for testing
-const server = new Node();
-const clientA = new Node();
-const clientB = new Node();
-const clientC = new Node();
-const clientD = new Node();
-const clientE = new Node();
-const clientF = new Node();
-const clientG = new Node();
-const clientH = new Node();
-server.type = "source";
-clientA.type = "peer";
-clientB.type = "peer";
-clientC.type = "peer";
-clientD.type = "peer";
-clientE.type = "peer";
-clientF.type = "peer";
-clientG.type = "peer";
-clientH.type = "sink";
-simulator.addNode(server);
-simulator.addNode(clientA);
-simulator.addNode(clientB);
-simulator.addNode(clientC);
-simulator.addNode(clientD);
-simulator.addNode(clientE);
-simulator.addNode(clientF);
-simulator.addNode(clientG);
-simulator.addNode(clientH);
+const sender = new Node();
+const broadcaster = new Node();
+const peers = [];
 
-// Simulation callbacks
-// What should the simulator do when starting?
+for(let i = 0; i < 10 ; i++) {
+    let node = new Node();
+    console.log(node.speed.down);
+    console.log(node.speed.up);
+    node.type = "peer";
+    peers.push(node);
+    simulator.addNode(node);
+}
+
+sender.type = "source";
+broadcaster.type = "sink";
+broadcaster.speed.up = 300;
+broadcaster.speed.down = 300;
+sender.speed.up = 300;
+simulator.addNode(sender);
+simulator.addNode(broadcaster);
+
 simulator.onStart(() => {
-    server.send(clientA, 50000);
-    server.send(clientE, 92000);
-    // Always need to initialize view
+    sender.send(broadcaster, 1000000);
     view.init();
 })
 
-// What should the simulator do when stepping?
 simulator.onStep(() => {
-    // if(simulator.time === 10) {
-    //     clientC.send(clientB, {size: 100000});
-    // }
-    // Always update the view after a step
     view.update();
 })
 
-// Node callbacks
-clientA.onReceive(message => {
-    clientA.send(clientC, 69000, message.time.arrive);
+broadcaster.onReceive(message => {
+    peers.forEach(peer => {
+        broadcaster.send(peer, message.size, message.time.arrive);
+    })
 })
 
-clientC.onReceive(message => {
-    clientC.send(clientB, 75000, message.time.arrive);
-})
+// const nodeA = new Node();
+// const nodeB = new Node();
 
-clientB.onReceive(message => {
-    clientB.send(clientD, 81000, message.time.arrive);
-})
+// nodeA.type = "peer";
+// nodeB.type = "peer";
+// simulator.addNode(nodeA);
+// simulator.addNode(nodeB);
 
-clientD.onReceive(message => {
-    clientD.send(clientA, 51000, message.time.arrive);
-})
+// simulator.onStart(() => {
+//     nodeA.send(nodeB, 1000000);
+//     view.init();
+// })
 
-clientE.onReceive(message => {
-    clientE.send(clientG, 120000, message.time.arrive);
-})
+// simulator.onStep(() => {
+//     view.update();
+// })
 
-clientG.onReceive(message => {
-    clientG.send(clientF, 34000, message.time.arrive);
-})
+// nodeB.onReceive(message => {
+//     nodeB.send(nodeA, message.size, message.time.arrive);
+// })
 
-clientF.onReceive(message => {
-    clientF.send(clientH, 28000, message.time.arrive);
-})
+// nodeA.onReceive(message => {
+//     nodeA.send(nodeB, message.size, message.time.arrive);
+// })
 
-clientH.onReceive(message => {
-    clientH.send(clientE, 15000, message.time.arrive);
-})
+// // Manually adding Node() objects for testing
+// const source = new Node();
+// const sink = new Node();
+// const clients = []
+// source.type = "source";
+// sink.type = "sink";
+// simulator.addNode(source);
+// simulator.addNode(sink);
+// for(let i = 0; i < 12; i++) {
+//     clients.push(new Node());
+// }
+// clients.forEach(node => {
+//     node.type = "peer";
+//     simulator.addNode(node);
+// })
 
-// Manually start and step simulator for testing
-simulator.start();
+// // Simulation callbacks
+// // What should the simulator do when starting?
+// simulator.onStart(() => {
+//     source.send(clients[0], 50000, simulator.time);
+//     // server.send(clientB, 92000);
+//     // Always need to initialize view
+//     view.init();
+// })
 
+// // What should the simulator do when stepping?
+// simulator.onStep(() => {
+//     view.update();
+// })
+
+// // Node callbacks
+// clients.forEach(node => {
+//     node.onReceive(message => {
+//         let rand = parseInt(Math.random() * node.parent.nodes.length);
+//         let randomPeer = node.parent.nodes[rand];
+//         while(randomPeer === node) {
+//             rand = parseInt(Math.random() * node.parent.nodes.length);
+//             randomPeer = node.parent.nodes[rand];
+//         }
+//         node.send(randomPeer, message.size, message.time.arrive);
+//     })
+// })
+
+// sink.onReceive(message => {
+//     sink.send(clients[0], message.size, message.time.arrive);
+// })
+
+// source.onReceive(message => {
+//     sink.send(clients[0], message.size, message.time.arrive);
+// })
+
+// Manually init simulator for testing
+simulator.init();
+
+// Temp buttons
 document.getElementById("stepButton").addEventListener("click", event => {
     simulator.step(1);
 })
@@ -107,7 +140,11 @@ document.getElementById("autoButton").addEventListener("click", event => {
     document.getElementById("stopButton").classList.remove("disabled");
     
     autoStep = setInterval(() => {
-        simulator.step(1);
+        if(simulator.time < simulator.timeEnd) {
+            simulator.step(1);
+        } else {
+            clearInterval(autoStep);
+        }
     }, 100)
 })
 

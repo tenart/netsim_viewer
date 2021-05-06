@@ -43,7 +43,7 @@ export default class Simulator {
     }
     
     // Start simulation but not step automatically
-    start() {
+    init() {
         // TODO
         console.log(`T${this.time}: Starting ...`);
         this.nodes.forEach(node => { node.start() });
@@ -52,14 +52,16 @@ export default class Simulator {
 
     // Step simulation forward one step (1 ms) by default
     step(skip) {
-        skip = skip !== undefined ? skip : 1;
-        this.time += skip !== undefined ? skip : 1;
-        this._serviceMessages();
-        this.scheduled = this.scheduled.concat(this.buffer);
-        this.buffer = [];
-        this.nodes.forEach(node => { node.step() });
-        this.callbacks.step.forEach(callback => { callback() });
-        console.log(`T${this.time}:`);
+        if(this.time < this.timeEnd) {
+            skip = skip !== undefined ? skip : 1;
+            this.time += skip !== undefined ? skip : 1;
+            this._serviceMessages();
+            this.scheduled = this.scheduled.concat(this.buffer);
+            this.buffer = [];
+            this.nodes.forEach(node => { node.step() });
+            this.callbacks.step.forEach(callback => { callback() });
+            console.log(`T${this.time}:`);
+        }
     }
 
     stop() {

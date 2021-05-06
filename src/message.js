@@ -6,13 +6,12 @@ export default class Message {
         // timeSent is required
         // from is required
         // to is required
-        // If no options passed in then use default preset
         this.id = utils.uuid();
         // Node() objects this message originated from / going to
         this.from = from;
         this.to = to;
         // size: message size in Bytes
-        this.size = size !== undefined ? size : 8000;
+        this.size = size;
         // Timing information
         this.time = {
             sent: timeSent,

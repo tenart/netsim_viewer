@@ -7,7 +7,7 @@ export default class Node {
         // If no options passed in then use default preset
         options = options !== undefined ? options : this.default();
         // id:      int assigned when added to a simulation
-        // parent:  reference to parent simulator
+        // parent:  reference to parent simulator, defined when added to a sim
         this.id = undefined;
         this.parent = undefined;
         // name:    semi-unique string
@@ -45,8 +45,8 @@ export default class Node {
             name: utils.uuid(),
             type: undefined,
             speed: {
-                up: 55,
-                down: 85
+                up: parseInt(Math.random()*20) + 60,
+                down: parseInt(Math.random()*20) + 80
             },
             link: {
                 to: undefined,
@@ -61,8 +61,9 @@ export default class Node {
     }
 
     send(target, size, time) {
-        let timeStamp = time !== undefined ? time : this.parent.time;
-        let message = new Message(timeStamp, this, target, size);
+        time = time !== undefined ? time : this.parent.time;
+        size = size !== undefined ? size : 8000
+        let message = new Message(time, this, target, size);
         this.parent.schedule(message);
         console.log(`T${this.parent.time}: [${this.id}] >>>> [${message.to.id}]`);
         console.log(`T${this.parent.time}: [${this.id}] | size    ${message.size} bytes`);
