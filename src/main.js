@@ -12,6 +12,7 @@ const simulator = new Simulator({
 const root = document.getElementById("root");
 const view = new View(simulator, root);
 
+// BROADCAST
 const sender = new Node();
 const broadcaster = new Node();
 const peers = [];
@@ -48,6 +49,10 @@ broadcaster.onReceive(message => {
     })
 })
 
+// BROADCAST ENDS HERE
+
+
+// THIS IS PING PONG CODE
 // const nodeA = new Node();
 // const nodeB = new Node();
 
@@ -73,6 +78,9 @@ broadcaster.onReceive(message => {
 //     nodeA.send(nodeB, message.size, message.time.arrive);
 // })
 
+// PING PONG ENDS HERE
+
+// DEFAULT
 // // Manually adding Node() objects for testing
 // const source = new Node();
 // const sink = new Node();
