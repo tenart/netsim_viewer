@@ -8,6 +8,8 @@ export default class Simulator {
         this.time = options.timeStart;
         this.timeEnd = options.timeEnd;
         // List of Message() objects to deliver over time
+        // buffer is to keep new messages entering in between steps
+        this.buffer = [];
         this.scheduled = [];
         // callbacks:   any functions this system should call
         this.callbacks = {
@@ -36,9 +38,8 @@ export default class Simulator {
     }
 
     schedule(message) {
-        message.id = this.scheduled.length + 1;
-        this.scheduled.push(message);
-        console.log(`T${this.time}: [${message.from.id}] -- msg_${message.id} -> [${message.to.id}] sending ${message.size} bytes, arriving at ${message.time.arrive}.`);
+        // message.id = this.scheduled.length + 1;
+        this.buffer.push(message);
     }
     
     // Start simulation but not step automatically
@@ -53,27 +54,12 @@ export default class Simulator {
     step(skip) {
         skip = skip !== undefined ? skip : 1;
         this.time += skip !== undefined ? skip : 1;
-        let toRemove = [];
-        this.scheduled.forEach(message => {
-            message.time.progress = (this.time - message.time.sent)/(message.time.arrive - message.time.sent);
-            if(this.time >= message.time.arrive) {
-                let shortTime = String(message.time.arrive).slice(0,8)
-                console.log(`T${this.time}: [${message.from.id}] -- msg_${message.id} -> [${message.to.id}] arrived at T${message.time.arrive}`);
-                let msgIndex = this.scheduled.indexOf(message);
-                toRemove.push(msgIndex);
-            }
-        })
-        let keep = [];
-        this.scheduled.forEach((message, index) => {
-            if(!toRemove.includes(index)) {
-                keep.push(message);
-            }
-        })
-        this.scheduled = keep;
-
+        this._serviceMessages();
+        this.scheduled = this.scheduled.concat(this.buffer);
+        this.buffer = [];
         this.nodes.forEach(node => { node.step() });
         this.callbacks.step.forEach(callback => { callback() });
-        console.log(`T${this.time}: Stepped time += ${skip} ...`);
+        console.log(`T${this.time}:`);
     }
 
     stop() {
@@ -91,6 +77,27 @@ export default class Simulator {
 
     onStop(callback) {
         this.callbacks.stop.push(callback);
+    }
+
+    _serviceMessages() {
+        let toDeliver = [];
+        this.scheduled.forEach(message => {
+            message.time.progress = (this.time - message.time.sent)/(message.time.arrive - message.time.sent);
+            if(this.time >= message.time.arrive) {
+                let msgIndex = this.scheduled.indexOf(message);
+                toDeliver.push(message);
+            }
+        })
+        let toKeep = [];
+        this.scheduled.forEach((message) => {
+            if(!toDeliver.includes(message)) {
+                toKeep.push(message);
+            }
+        })
+        toDeliver.forEach(message => {
+            message.to.receive(message);
+        })
+        this.scheduled = toKeep;
     }
 
 }

@@ -37,7 +37,7 @@ export default class View {
             let html = this._messageToHTML(message);
             this.root.appendChild(html);
         })
-        document.getElementById("stepButton").innerHTML = this.simulator.time;
+        // document.getElementById("stepButton").innerHTML = this.simulator.time;
     }
 
     _nodeToHTML(node) {
@@ -66,7 +66,7 @@ export default class View {
         let progressFill = document.createElement("div");
         let label = document.createElement("div");
         label.classList.add("label");
-        label.innerHTML = message.time.progress;
+        label.innerHTML = Math.round(message.time.progress*100);
         progressFill.style.width = `${message.time.progress * 100}%`;
         progressFill.classList.add("progressFill");
         progressBar.classList.add("progress");

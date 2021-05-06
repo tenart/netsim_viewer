@@ -34,7 +34,8 @@ export default class Node {
         this.callbacks = {
             start: [],
             step: [],
-            end: []
+            end: [],
+            receive: []
         };
     }
 
@@ -59,9 +60,26 @@ export default class Node {
         return preset;
     }
 
-    sendMessage(target, size) {
-        let message = new Message(this.parent.time, this, target, size);
+    send(target, size, time) {
+        let timeStamp = time !== undefined ? time : this.parent.time;
+        let message = new Message(timeStamp, this, target, size);
         this.parent.schedule(message);
+        console.log(`T${this.parent.time}: [${this.id}] >>>> [${message.to.id}]`);
+        console.log(`T${this.parent.time}: [${this.id}] | size    ${message.size} bytes`);
+        console.log(`T${this.parent.time}: [${this.id}] | sent_at ${message.time.sent}`);
+        console.log(`T${this.parent.time}: [${this.id}] | t_delay ${message.time.arrive} ms`);
+        console.log(`T${this.parent.time}: [${this.id}] | arrival ${message.time.arrive}`);
+    }
+
+    receive(message) {
+        // console.log(`T${this.parent.time}: ${message.time.arrive}`);
+        let shortTime = String(message.time.arrive).slice(0,8)
+        console.log(`T${this.parent.time}: [${this.id}] <<<< [${message.from.id}]`);
+        console.log(`T${this.parent.time}: [${this.id}] | size    ${message.size} bytes`);
+        console.log(`T${this.parent.time}: [${this.id}] | sent_at ${message.time.sent}`);
+        console.log(`T${this.parent.time}: [${this.id}] | t_delay ${message.time.arrive} ms`);
+        console.log(`T${this.parent.time}: [${this.id}] | arrival ${message.time.arrive}`);
+        this.callbacks.receive.forEach(callback => { callback(message) });
     }
 
     start() {
@@ -86,6 +104,10 @@ export default class Node {
 
     onStop(callback) {
         this.callbacks.stop.push(callback);
+    }
+
+    onReceive(callback) {
+        this.callbacks.receive.push(callback);
     }
 
 }

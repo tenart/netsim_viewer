@@ -150,4 +150,16 @@ body {
 button {
     z-index: 999;
     position: relative;
+    margin-top: 20px;
 }
+
+button.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+    cursor: not-allowed;
+}
+
+button:first-of-type {
+    margin-left: 20px;
+}
+
