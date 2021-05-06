@@ -45,8 +45,8 @@ export default class Node {
             name: utils.uuid(),
             type: undefined,
             speed: {
-                up: parseInt(Math.random()*20) + 60,
-                down: parseInt(Math.random()*20) + 80
+                up: parseInt(Math.random()*30) + 60,
+                down: parseInt(Math.random()*30) + 80
             },
             link: {
                 to: undefined,
