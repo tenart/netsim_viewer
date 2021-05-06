@@ -2,8 +2,11 @@ import Node from "./node.js";
 import Simulator from "./simulator.js"
 import View from "./view.js";
 
+// NOTE MAIN JS NOW IMPLEMENTS THE BROADCAST SIMULATION.
+// THE BROADCAST FILE REFERENCES THIS FILE. CAN EASILY CHANGE IF NEEDED
+
 // Reference to simulator engine
-const simulator = new Simulator({
+let simulator = new Simulator({
     timeStart: 0, 
     timeEnd: 2000
 });
@@ -50,36 +53,6 @@ broadcaster.onReceive(message => {
 })
 
 // BROADCAST ENDS HERE
-
-//test
-
-// THIS IS PING PONG CODE
-// const nodeA = new Node();
-// const nodeB = new Node();
-
-// nodeA.type = "peer";
-// nodeB.type = "peer";
-// simulator.addNode(nodeA);
-// simulator.addNode(nodeB);
-
-// simulator.onStart(() => {
-//     nodeA.send(nodeB, 1000000);
-//     view.init();
-// })
-
-// simulator.onStep(() => {
-//     view.update();
-// })
-
-// nodeB.onReceive(message => {
-//     nodeB.send(nodeA, message.size, message.time.arrive);
-// })
-
-// nodeA.onReceive(message => {
-//     nodeA.send(nodeB, message.size, message.time.arrive);
-// })
-
-// PING PONG ENDS HERE
 
 // DEFAULT
 // // Manually adding Node() objects for testing
