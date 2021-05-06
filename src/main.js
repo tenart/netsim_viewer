@@ -33,14 +33,15 @@ simulator.addNode(clientD);
 
 // What should the simulator do when starting?
 simulator.onStart(() => {
-    // console.log("HELLO WORLD");
-    server.sendMessage(clientA, {size: 30000});
-    clientC.sendMessage(clientB, {size: 100000});
+    server.sendMessage(clientA, {size: 500000});
     view.init();
 })
 
 // What should the simulator do when stepping?
 simulator.onStep(() => {
+    if(simulator.time === 10) {
+        clientC.sendMessage(clientB, {size: 100000});
+    }
     view.update();
 })
 
@@ -48,7 +49,7 @@ simulator.onStep(() => {
 simulator.start();
 
 document.getElementById("stepButton").addEventListener("click", event => {
-    simulator.step();
+    simulator.step(1);
 })
 
 // setInterval(() => {

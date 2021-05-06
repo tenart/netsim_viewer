@@ -53,11 +53,9 @@ export default class Simulator {
     step(skip) {
         skip = skip !== undefined ? skip : 1;
         this.time += skip !== undefined ? skip : 1;
-        
         let toRemove = [];
         this.scheduled.forEach(message => {
-            message.time.progress = this.time/message.time.arrive;
-            // console.log(message.time.arrive);
+            message.time.progress = (this.time - message.time.sent)/(message.time.arrive - message.time.sent);
             if(this.time >= message.time.arrive) {
                 let shortTime = String(message.time.arrive).slice(0,8)
                 console.log(`T${this.time}: [${message.from.id}] -- msg_${message.id} -> [${message.to.id}] arrived at T${message.time.arrive}`);
@@ -65,9 +63,13 @@ export default class Simulator {
                 toRemove.push(msgIndex);
             }
         })
-        toRemove.forEach(index => {
-            this.scheduled.splice(index, 1);
+        let keep = [];
+        this.scheduled.forEach((message, index) => {
+            if(!toRemove.includes(index)) {
+                keep.push(message);
+            }
         })
+        this.scheduled = keep;
 
         this.nodes.forEach(node => { node.step() });
         this.callbacks.step.forEach(callback => { callback() });

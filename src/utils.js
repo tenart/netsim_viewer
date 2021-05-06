@@ -17,6 +17,7 @@ export const utils =  {
     calcDelay: (r, b) => {
         let bits = b * 8;
         let delay = bits / (r * 1000000);
+        console.log(`${bits} bits / ${r} Mbps = ${delay*1000} ms`);
         return delay * 1000;
     },
     // Return random {x: int, y: int} that is somewhere 
