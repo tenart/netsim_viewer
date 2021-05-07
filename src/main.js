@@ -5,6 +5,8 @@ import View from "./view.js";
 // NOTE MAIN JS NOW IMPLEMENTS THE BROADCAST SIMULATION.
 // THE BROADCAST FILE REFERENCES THIS FILE. CAN EASILY CHANGE IF NEEDED
 
+// npx browser-sync start -sw
+
 // Reference to simulator engine
 let simulator = new Simulator({
     timeStart: 0,
@@ -67,6 +69,7 @@ let autoStep;
 document.getElementById("autoButton").addEventListener("click", event => {
     document.getElementById("autoButton").classList.add("disabled");
     document.getElementById("stepButton").classList.add("disabled");
+    document.getElementById("resetButton").classList.add("disabled");
     document.getElementById("stopButton").classList.remove("disabled");
 
     autoStep = setInterval(() => {
@@ -81,6 +84,7 @@ document.getElementById("autoButton").addEventListener("click", event => {
 document.getElementById("stopButton").addEventListener("click", event => {
     document.getElementById("autoButton").classList.remove("disabled");
     document.getElementById("stepButton").classList.remove("disabled");
+    document.getElementById("resetButton").classList.remove("disabled");
     document.getElementById("stopButton").classList.add("disabled");
 
     clearInterval(autoStep);
