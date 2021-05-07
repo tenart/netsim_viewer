@@ -70,9 +70,5 @@ document.getElementById("stopButton").addEventListener("click", event => {
 })
 
 document.getElementById('resetButton').addEventListener('click',() => {
-    simulator = new Simulator({
-        timeStart: 0,
-        timeEnd: 2000
-    });
-    simulator.init();
+    window.location.reload();
 })

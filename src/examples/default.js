@@ -85,7 +85,7 @@ document.getElementById("autoButton").addEventListener("click", event => {
         } else {
             clearInterval(autoStep);
         }
-    }, 100)
+    }, 1000)
 })
 
 document.getElementById("stopButton").addEventListener("click", event => {
@@ -94,4 +94,8 @@ document.getElementById("stopButton").addEventListener("click", event => {
     document.getElementById("stopButton").classList.add("disabled");
 
     clearInterval(autoStep);
+})
+
+document.getElementById('resetButton').addEventListener('click',() => {
+    window.location.reload();
 })

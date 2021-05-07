@@ -70,6 +70,19 @@ export default class Node {
         console.log(`T${this.parent.time}: [${this.id}] | sent_at ${message.time.sent}`);
         console.log(`T${this.parent.time}: [${this.id}] | t_delay ${message.time.arrive} ms`);
         console.log(`T${this.parent.time}: [${this.id}] | arrival ${message.time.arrive}`);
+
+        if (document.readyState === 'complete') {
+            let node = document.getElementById(this.id);
+            let popup = document.createElement('div');
+            popup.className = "popup";
+            let newID = utils.uuid().toString();
+            popup.id = newID;
+            popup.innerHTML = `<span class="popuptext" id="myPopup">Sending message of ${message.size} bytes</span>`;
+            node.append(popup);
+            setTimeout(() => {
+                document.getElementById(newID).remove();
+            },2000);
+        }
     }
 
     receive(message) {
@@ -81,6 +94,17 @@ export default class Node {
         console.log(`T${this.parent.time}: [${this.id}] | t_delay ${message.time.arrive} ms`);
         console.log(`T${this.parent.time}: [${this.id}] | arrival ${message.time.arrive}`);
         this.callbacks.receive.forEach(callback => { callback(message) });
+
+        let node = document.getElementById(this.id);
+        let popup = document.createElement('div');
+        popup.className = "popup";
+        let newID = utils.uuid().toString();
+        popup.id = newID;
+        popup.innerHTML = `<span class="popuptext" id="myPopup">Received message of ${message.size} bytes</span>`;
+        node.append(popup);
+        setTimeout(() => {
+            document.getElementById(newID).remove();
+        },1000);
     }
 
     start() {
