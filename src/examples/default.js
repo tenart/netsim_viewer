@@ -5,7 +5,7 @@ import Node from "../node.js";
 // Reference to simulator engine
 let simulator = new Simulator({
     timeStart: 0,
-    timeEnd: 2000
+    timeEnd: 500
 });
 
 // Reference to GUI resources
@@ -21,7 +21,7 @@ source.type = "source";
 sink.type = "sink";
 simulator.addNode(source);
 simulator.addNode(sink);
-for(let i = 0; i < 12; i++) {
+for(let i = 0; i < 18; i++) {
     clients.push(new Node());
 }
 clients.forEach(node => {
@@ -86,7 +86,7 @@ document.getElementById("autoButton").addEventListener("click", event => {
         } else {
             clearInterval(autoStep);
         }
-    }, 1000)
+    }, 10)
 })
 
 document.getElementById("stopButton").addEventListener("click", event => {
