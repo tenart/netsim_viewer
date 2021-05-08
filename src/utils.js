@@ -20,6 +20,12 @@ export const utils =  {
         // console.log(`${bits} bits / ${r} Mbps = ${delay*1000} ms`);
         return delay * 1000;
     },
+    // Returns the center of the screen as a set of X,Y coords
+    screenCenter() {
+        let x = Math.round(window.innerWidth / 2);
+        let y = Math.round(window.innerHeight / 2);
+        return {x: x, y: y};
+    },
     // Return random {x: int, y: int} that is somewhere 
     // on the screen
     randomPos: () => {
@@ -50,5 +56,12 @@ export const utils =  {
     getAngle: (a, b) => {
         var deg = Math.atan2(b.y - a.y, b.x - a.x) * 180 / Math.PI;
         return deg;
+    },
+    //
+    pointAngleDistance(c, a, d) {
+        let rad = a * Math.PI / 180;
+        let x = 0 + (d * Math.cos(rad));
+        let y = 0 + (d * Math.sin(rad));
+        return {x: c.x + x, y: c.y + y};
     }
 } 

@@ -2,10 +2,10 @@ import { utils } from "./utils.js";
 
 export default class View {
 
-    constructor(simulator, root, timeline) {
+    constructor(simulator, root, tools) {
         this.simulator = simulator;
         this.root = root;
-        this.timeline = timeline;
+        this.tools = tools;
     }
 
     init() {
@@ -78,6 +78,7 @@ export default class View {
         progressBar.style.transform = `rotate(${angle}deg)`;
         container.appendChild(progressBar);
         container.appendChild(label)
+        container.classList.add(message.from.type);
         container.id = `msg_${message.id}`;
         container.classList.add("link");
         container.setAttribute("node_from", message.from.id);
@@ -118,8 +119,8 @@ export default class View {
     }
 
     _updateTimeline() {
-        let needle = this.timeline.querySelector("#needle");
-        let display = this.timeline.querySelector("#time_display");
+        let needle = this.tools.querySelector("#needle");
+        let display = this.tools.querySelector("#time_display");
         let percent = (this.simulator.time / this.simulator.timeEnd * 100);
         needle.style.marginLeft = `${percent}%`;
         display.innerHTML = this.simulator.time;

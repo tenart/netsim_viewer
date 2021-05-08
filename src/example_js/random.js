@@ -5,36 +5,28 @@ import Node from "../node.js";
 // Reference to simulator engine
 let simulator = new Simulator({
     timeStart: 0,
-    timeEnd: 500
+    timeEnd: 1000
 });
 
 // Reference to GUI resources
 const root = document.getElementById("root");
-const timeline = document.getElementById("timeline");
-const view = new View(simulator, root, timeline);
+const tools = document.getElementById("tools");
+const view = new View(simulator, root, tools);
+const clients = [];
 
-// DEFAULT
-// Manually adding Node() objects for testing
-const source = new Node();
-const sink = new Node();
-const clients = []
-source.type = "source";
-sink.type = "sink";
-simulator.addNode(source);
-simulator.addNode(sink);
-for(let i = 0; i < 18; i++) {
-    clients.push(new Node());
-}
-clients.forEach(node => {
-    node.type = "peer";
+for(let i = 0; i < 20; i++) {
+    let colors = ["red", "orange", "yellow", "green", "blue", "purple"];
+    let randColor = colors[parseInt(Math.random() * colors.length)];
+    let node = new Node();
+    node.type = randColor;
+    clients.push(node);
     simulator.addNode(node);
-})
+}
 
 // Simulation callbacks
 // What should the simulator do when starting?
 simulator.onStart(() => {
-    source.send(clients[0], 50000, simulator.time);
-    // server.send(clientB, 92000);
+    clients[0].send(clients[1], 50000, simulator.time);
     // Always need to initialize view
     view.init();
 })
@@ -44,7 +36,6 @@ simulator.onStep(() => {
     view.update();
 })
 
-// Node callbacks
 clients.forEach(node => {
     node.onReceive(message => {
         let rand = parseInt(Math.random() * node.parent.nodes.length);
@@ -57,14 +48,6 @@ clients.forEach(node => {
     })
 })
 
-sink.onReceive(message => {
-    sink.send(clients[0], message.size, message.time.arrive);
-})
-
-source.onReceive(message => {
-    sink.send(clients[0], message.size, message.time.arrive);
-})
-
 // Manually init simulator for testing
 simulator.init();
 
@@ -74,6 +57,8 @@ document.getElementById("stepButton").addEventListener("click", event => {
 })
 
 let autoStep;
+let isAutoStepping = false;
+let autoInterval = 200;
 
 document.getElementById("autoButton").addEventListener("click", event => {
     document.getElementById("autoButton").classList.add("disabled");
@@ -83,11 +68,15 @@ document.getElementById("autoButton").addEventListener("click", event => {
 
     autoStep = setInterval(() => {
         if(simulator.time < simulator.timeEnd) {
+            isAutoStepping = true;
             simulator.step(1);
         } else {
             clearInterval(autoStep);
+            isAutoStepping = false;
+            document.getElementById("resetButton").classList.remove("disabled");
+            document.getElementById("stopButton").classList.add("disabled");
         }
-    }, 10)
+    }, autoInterval)
 })
 
 document.getElementById("stopButton").addEventListener("click", event => {
@@ -97,8 +86,34 @@ document.getElementById("stopButton").addEventListener("click", event => {
     document.getElementById("stopButton").classList.add("disabled");
 
     clearInterval(autoStep);
+    isAutoStepping = false;
 })
 
 document.getElementById('resetButton').addEventListener('click',() => {
     window.location.reload();
+})
+
+$("#speed_handle").draggable({
+    containment: "parent",
+    axis: "x"
+});
+
+$("#speed_handle").on("drag", event => {
+    clearInterval(autoStep);
+    let handle = $(event.target);
+    let factor = 1-(parseInt(handle.css("left"))/132);
+    autoInterval = 1000 * factor;
+    if(isAutoStepping) {
+        autoStep = autoStep = setInterval(() => {
+            if(simulator.time < simulator.timeEnd) {
+                isAutoStepping = true;
+                simulator.step(1);
+            } else {
+                clearInterval(autoStep);
+                isAutoStepping = false;
+                document.getElementById("resetButton").classList.remove("disabled");
+                document.getElementById("stopButton").classList.add("disabled");
+            }
+        }, autoInterval);
+    }
 })

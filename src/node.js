@@ -45,8 +45,8 @@ export default class Node {
             name: utils.uuid(),
             type: undefined,
             speed: {
-                up: parseInt(Math.random()*30) + 60,
-                down: parseInt(Math.random()*30) + 80
+                up: parseInt(Math.random()*30) + 30,
+                down: parseInt(Math.random()*30) + 50
             },
             link: {
                 to: undefined,
@@ -77,7 +77,7 @@ export default class Node {
             popup.className = "popup";
             let newID = utils.uuid().toString();
             popup.id = newID;
-            popup.innerHTML = `<span class="popuptext" id="myPopup">Sending message of ${message.size} bytes</span>`;
+            popup.innerHTML = `<span class="popuptext" id="myPopup">Sending ${message.size} bytes</span>`;
             node.append(popup);
             setTimeout(() => {
                 document.getElementById(newID).remove();
@@ -100,7 +100,7 @@ export default class Node {
         popup.className = "popup";
         let newID = utils.uuid().toString();
         popup.id = newID;
-        popup.innerHTML = `<span class="popuptext" id="myPopup">Received message of ${message.size} bytes</span>`;
+        popup.innerHTML = `<span class="popuptext" id="myPopup">Received ${message.size} bytes</span>`;
         node.append(popup);
         setTimeout(() => {
             document.getElementById(newID).remove();

@@ -4,37 +4,39 @@
         <meta charset="UTF-8">
         <title>Network Simulator</title>
         <link href="css/reset.css" type="text/css" rel="stylesheet">
-        <!-- <link href="css/styles.css" type="text/css" rel="stylesheet"> -->
         <link href="css/styles_index.css" type="text/css" rel="stylesheet">
     </head>
-    <body class="show_sidebar">
+    <body class="">
         <button id="toggle_sidebar"></button>
         <div id="sidebar">
             <h1 id="side_header">
                 Explore Presets
             </h1>
-            <div class="item active" data-page="examplePages/default.html">
-                <h1>Random Casting</h1>
-                <h2>20 nodes</h2>
-            </div>
-            <div class="item" data-page="examplePages/pingPong.html">
+            <div id="ping_pong" class="item active" data-page="example_pages/ping_pong.html">
                 <h1>Ping Pong</h1>
-                <h2>2 nodes</h2>
+                <h2>2 nodes | 500 ms</h2>
             </div>
-            <div class="item" data-page="examplePages/broadcast.html">
+            <div id="random" class="item" data-page="example_pages/random.html">
+                <h1>Random</h1>
+                <h2>20 node | 1000 ms</h2>
+            </div>
+            <div id="broadcast" class="item" data-page="example_pages/broadcast.html">
                 <h1>Broadcast</h1>
-                <h2>15 nodes</h2>
+                <h2>15 nodes | 250 ms</h2>
             </div>
-            <div class="item">
-                <h1>Loops</h1>
-                <h2>8 nodes</h2>
+            <div id="loop" class="item" data-page="example_pages/loops.html">
+                <h1>Loop</h1>
+                <h2>10 nodes | 500 ms</h2>
             </div>
-            <div class="item">
+            <div id="stop_go" class="item" data-page="example_pages/stop_go.html">
                 <h1>Stop and Go</h1>
-                <h2>2 nodes</h2>
+                <h2>2 nodes | 800 ms</h2>
             </div>
         </div>
-        <iframe id="frame" src="examplePages/default.html"></iframe>
+        <div id="authors">
+            By Tom Nguyen & Harman Martin v1.0
+        </div>
+        <iframe id="frame" src="example_pages/ping_pong.html"></iframe>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
         <script>
@@ -44,9 +46,12 @@
                 })
 
                 $("#sidebar .item").click((e) => {
-                    let path = $(e.target).closest(".item").attr("data-page");
+                    let target = $(e.target).closest(".item");
+                    let path = target.attr("data-page");
                     $("#frame").attr("src", path);
                     // alert(path);
+                    $("#sidebar .item").removeClass("active");
+                    $(target).addClass("active");
                 })
             })
         </script>
