@@ -113,7 +113,7 @@ body.show_sidebar #toggle_sidebar:hover {
 }
 
 #sidebar > .item.active {
-    
+    pointer-events: none;
     /* background: #fff; */
     /* color: black; */
     box-shadow: inset 4px 0 0 0 #fff;
