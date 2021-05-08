@@ -10,12 +10,13 @@ import View from "./view.js";
 // Reference to simulator engine
 let simulator = new Simulator({
     timeStart: 0,
-    timeEnd: 2000
+    timeEnd: 500
 });
 
 // Reference to GUI resources
 const root = document.getElementById("root");
-const view = new View(simulator, root);
+const timeline = document.getElementById("timeline");
+const view = new View(simulator, root, timeline);
 
 // BROADCAST
 const sender = new Node();

@@ -2,9 +2,10 @@ import { utils } from "./utils.js";
 
 export default class View {
 
-    constructor(simulator, root) {
+    constructor(simulator, root, timeline) {
         this.simulator = simulator;
         this.root = root;
+        this.timeline = timeline;
     }
 
     init() {
@@ -29,6 +30,7 @@ export default class View {
     }
 
     update() {
+        this._updateTimeline();
         let links = document.getElementsByClassName("link");
         Array.from(links).forEach(link => {
             link.remove();
@@ -37,6 +39,7 @@ export default class View {
             let html = this._messageToHTML(message);
             this.root.appendChild(html);
         })
+        // this.timeline.innerHTML = this.simulator.time;
         // document.getElementById("stepButton").innerHTML = this.simulator.time;
     }
 
@@ -114,4 +117,11 @@ export default class View {
         this._updateLinks();
     }
 
+    _updateTimeline() {
+        let needle = this.timeline.querySelector("#needle");
+        let display = this.timeline.querySelector("#time_display");
+        let percent = (this.simulator.time / this.simulator.timeEnd * 100);
+        needle.style.marginLeft = `${percent}%`;
+        display.innerHTML = this.simulator.time;
+    }
 }

@@ -10,7 +10,8 @@ let simulator = new Simulator({
 
 // Reference to GUI resources
 const root = document.getElementById("root");
-const view = new View(simulator, root);
+const timeline = document.getElementById("timeline");
+const view = new View(simulator, root, timeline);
 
 const nodeA = new Node();
 const nodeB = new Node();
