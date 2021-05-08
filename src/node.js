@@ -71,7 +71,15 @@ export default class Node {
         console.log(`T${this.parent.time}: [${this.id}] | t_delay ${message.time.arrive} ms`);
         console.log(`T${this.parent.time}: [${this.id}] | arrival ${message.time.arrive}`);
 
+        // TEMP HTML MANIPULATION, MOVE TO VIEW LATER
         if (document.readyState === 'complete') {
+            let timeline = document.getElementById("timeline");
+            let marker = document.createElement("div");
+            let percent = time / this.parent.timeEnd * 100;
+            marker.classList.add("marker", "send", this.type);
+            marker.style.left = `${percent}%`;
+            timeline.appendChild(marker);
+
             let node = document.getElementById(this.id);
             let popup = document.createElement('div');
             popup.className = "popup";
@@ -94,6 +102,14 @@ export default class Node {
         console.log(`T${this.parent.time}: [${this.id}] | t_delay ${message.time.arrive} ms`);
         console.log(`T${this.parent.time}: [${this.id}] | arrival ${message.time.arrive}`);
         this.callbacks.receive.forEach(callback => { callback(message) });
+
+        // TEMP HTML
+        let timeline = document.getElementById("timeline");
+        let marker = document.createElement("div");
+        let percent = message.time.arrive / this.parent.timeEnd * 100;
+        marker.classList.add("marker", "receive", this.type);
+        marker.style.left = `${percent}%`;
+        timeline.appendChild(marker);
 
         let node = document.getElementById(this.id);
         let popup = document.createElement('div');

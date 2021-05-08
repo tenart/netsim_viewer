@@ -27,6 +27,8 @@ export default class View {
             }
             this._updateDrag(id, pos);
         })
+        let timelineSizing = 10000 / this.simulator.timeEnd;
+        $(this.tools).find("#timeline").css("background-size", `${timelineSizing}% 10px`)
     }
 
     update() {
